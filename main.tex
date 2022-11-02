@@ -1,0 +1,295 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[serbian]{babel}
+\usepackage{cmsrb}
+\usetheme{metropolis}
+\usepackage{ragged2e}
+\apptocmd{\frame}{}{\justifying}{}
+\usepackage[export]{adjustbox}
+\usepackage{appendixnumberbeamer}
+\usepackage{caption}
+\usepackage{booktabs,siunitx}
+\usepackage{multirow}
+\usepackage{forest}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows}
+\usepackage{array,tabulary,tabularx,multirow}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usetikzlibrary{positioning,fadings,through}
+\usetikzlibrary{patterns}
+\usetikzlibrary{positioning,arrows.meta,bending}
+\usepackage{collectbox}
+\usepackage{ragged2e}
+\usepackage{etoolbox}
+\captionsetup{compatibility=false}
+\usefonttheme[onlymath]{serif}
+\apptocmd{\frame}{}{\justifying}{}
+%%%%%%%%%%%%%%%% MOJE %%%%%%%%%%%%%%%%%%
+\setbeamercovered{transparent}
+\usepackage{tikz}
+\usetikzlibrary{overlay-beamer-styles}
+ \tikzset{
+    highlight on/.style={alt={#1{fill=red!80!black,color=red!80!black}{fill=gray!30!white,color=gray!30!white}}},
+}
+
+\makeatletter
+\newcommand{\mybox}{%
+    \collectbox{%
+        \setlength{\fboxsep}{1pt}%
+        \fbox{\BOXCONTENT}%
+    }%
+}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+\AtBeginDocument{\renewcommand{\figurename}{Слика}}
+\AtBeginDocument{\renewcommand{\tablename}{Табела}}
+
+\title{Пример прављења садржаја формата презентације са Beamer класом}
+\subtitle{Поднаслов}
+
+\date{{12. октобар 2022.}}
+\author{Матеј Томић}
+\institute{Истраживачко-развојни центар}
+
+\titlegraphic{\includegraphics[height=1.2cm]{UniBGD.jpeg}\hfill\includegraphics[height=1.3cm]{logo_mf.pdf}}
+
+
+
+\begin{document}
+\sloppy
+  
+
+
+\maketitle
+
+\begin{frame}{Структура излагања}
+  
+  \begin{columns}
+    \begin{minipage}[t][0.5\textheight]{0.75\textwidth}
+    \setbeamertemplate{section in toc}[sections numbered]
+      \tableofcontents[sectionstyle=show]
+    \end{minipage}\hfill
+    \end{columns}
+\end{frame}
+
+\section{Напомене}
+\begin{frame}{Напомене}
+
+\begin{itemize}
+
+        \item Угледати се на садржај са линка испод \\
+        \small{\url{https://www.tug.org/teTeX/tetex-texmfdist/doc/latex/beamer/beameruserguide.pdf}}
+\end{itemize}
+    
+\end{frame}
+
+\section{Цртање помоћу Tikz-а}
+\begin{frame}{Блок дијаграми}
+
+
+\tikzset{
+block/.style={
+  draw, 
+  rectangle, 
+  minimum height=1cm, 
+  minimum width=3cm, align=center
+  }, 
+line/.style={->,>=latex'}
+}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=0.7, transform shape]
+\node[block] (exp) {\textsf{\normalsize Текст 1}};
+\node[block, below =1cm of exp,fill=lightgray] (vdp) {\normalsize \textsf{Вектор брзине} $\vec{U}, \mathbf{U}$};
+\node[block, below =1cm of vdp] (DF) {\normalsize \textsf{Закони одржања}\\ \textsf{масе, количине кретања и енергије}};
+\node[block, right =2cm of DF] (num) {\normalsize \textsf{Нумерички  прорачун}};
+\node[block, below =1cm of num,fill=lightgray] (vdpn) {\normalsize \textsf{Крива зависности}};
+\node[block, below =2cm of DF] (compare) {\normalsize \textsf{Поређење и анализа}};
+
+\draw[line] (exp.south) -| (vdp.north);
+\draw[line] (vdp.south) -| (DF.north);
+\draw[line] (DF.east) |- (num.west);
+\draw[line] (num.south) -| (vdpn.north);
+\draw[line] (vdpn.south) |- (compare.east);
+\draw[line] (vdp.west) -- ++(-1.55,0) |- (compare.west);
+
+
+\end{tikzpicture}
+    \caption{Шематски приказ од интереса.}
+    \label{figure6}
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}{Графикони и дијаграми}
+
+ \begin{figure}
+        \centering
+       \begin{tikzpicture}
+\pgfplotsset{title={Назив графика},
+    scale only axis,
+    xmin=0, xmax=700000,
+    every tick label/.append style={font=\small},
+    label style={font=\small}
+}
+
+\begin{axis}[legend style={fill=none,nodes={scale=0.6, transform shape},at={(1.3,1)}},/pgf/number format/.cd,
+        use comma,
+        1000 sep={},
+width=5cm,
+  height=3cm,
+grid=both,
+  ymin=0, ymax=2000,
+  xlabel={$x\ [\mathrm{m}]$},
+   every x tick scale label/.style={at={(rel axis cs:1,0)},anchor=south west,inner sep=1pt},
+  ylabel={$y\ [\mathrm{m/s^{2}}]$},
+]
+\addplot[red, thick]
+  coordinates{
+(26761,242.774818)
+(45270,240.712108)
+(67749,195.098826)
+(95670,217.26653)
+(121056,221.255554)
+(157663,221.247728)
+(197436,221.663624)
+(243490,214.78457)
+(294159,218.224656)
+(337714,219.381786)
+(396945,216.139586)
+(458968,219.229738)
+(527611,218.525398)
+(601308,216.325174)
+(662628,218.343164)
+  };
+  \addlegendentry{$\phi_{1}$}  
+\addplot[blue, thick]
+  coordinates{
+  (26761,657.441576)
+(45270,703.01088)
+(67749,610.610616)
+(95670,647.122608)
+(121056,653.628096)
+(157663,658.687788)
+(197436,644.190624)
+(243490,667.241388)
+(294159,660.246444)
+(337714,663.10002)
+(396945,648.601668)
+(458968,677.957148)
+(527611,675.047736)
+(601308,663.265152)
+(662628,669.606696)
+  };
+  \addlegendentry{$\phi_{3}$}  
+\addplot[black, thick]
+  coordinates{
+(26761,1235.6982)
+(45270,1136.287548)
+(67749,1157.324652)
+(95670,1105.726248)
+(121056,1163.757672)
+(157663,1186.583904)
+(197436,1235.08044)
+(243490,1222.22628)
+(294159,1211.79564)
+(337714,1195.87644)
+(396945,1147.97628)
+(458968,1183.59252)
+(527611,1215.2052)
+(601308,1210.32252)
+(662628,1112.586948)
+}; 
+\addlegendentry{$\phi_{3}$}  
+\end{axis}
+\end{tikzpicture}
+            \label{fig:mean and std of net34}
+    \end{figure}    
+\end{frame}
+
+
+\section{Математички запис}
+
+\begin{frame}{Једначина одржања количине кретања}
+
+Једначина са обележеним бројем
+    \begin{equation} \label{eq:1}
+    \frac{\partial \rho \vec{U}}{\partial t} + \nabla \cdot (\rho \vec{U} \vec{U}) = \rho \vec{f} - \nabla p + \nabla \cdot \widetilde{T}
+    \end{equation}	
+
+Једначина без обележеног броја 
+    \begin{equation*}
+    \vec{S} = \begin{bmatrix}
+    \frac{\partial \vec{p}_{x}}{\partial x} \\[1ex] 
+    \frac{\partial \vec{p}_{y}}{\partial y} \\[1ex] 
+    \frac{\partial \vec{p}_{z}}{\partial z} \\
+    \end{bmatrix},\ \ \widetilde{D} = \begin{bmatrix}
+    D_{xx} & \hdots & D_{xz} \\
+    \vdots & \ddots & \vdots \\
+    D_{zx} & \hdots & D_{zz} \\
+    \end{bmatrix},\ \ \widetilde{F} = \begin{bmatrix}
+    F_{xx} & \hdots & F_{xz} \\
+    \vdots & \ddots & \vdots \\
+    F_{zx} & \hdots & F_{zz} \\
+    \end{bmatrix}
+\end{equation*}
+    
+
+\end{frame}
+
+\section{Закључак}
+
+\begin{frame}{За крај}
+
+\begin{itemize}
+    \item Цитирати радове на следећи начин \cite{matze}
+\end{itemize}
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.5\linewidth]{example-grid-100x100pt}
+  \caption{Показна слика 2}
+  \label{fig:Pokazna1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=0.5\linewidth]{example-grid-100x100pt}
+  \caption{Показна слика 2}
+  \label{fig:Pokazna2}
+\end{subfigure}
+\caption{Показне слике 1 и 2}
+\label{fig:PokazneSlike}
+\end{figure}   
+
+\begin{itemize}
+    \item Позовите се на слику \ref{fig:Pokazna1} и слику \ref{fig:PokazneSlike} 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Литература}
+
+  \bibliography{main}
+  \bibliographystyle{abbrv}
+
+\end{frame}
+
+\end{document}
